@@ -13,18 +13,6 @@ type Model struct {
 	colMenu *mongo.Collection
 }
 
-type Menu struct {
-	Name           string    `bson:"name"`
-	CanBeOrder     bool      `bson:"can_be_order"`
-	Limited        int       `bson:"limited"`
-	Price          int       `bson:"price"`
-	Origin         string    `bson:"origin"`
-	TodayRecommend bool      `bson:"today_recommend"`
-	CreatedAt      time.Time `bson:"created_at"`
-	UpdatedAt      time.Time `bson:"updated_at"`
-	isDeleted      bool      `bson:"is_deleted"`
-}
-
 type Orderer struct {
 	Name      string    `bson:"name"`
 	Phone     string    `bson:"phone"`
