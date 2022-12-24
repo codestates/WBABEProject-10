@@ -1,8 +1,6 @@
 package router
 
 import (
-	"fmt"
-
 	ctl "lecture/WBABEProject-10/controller"
 
 	"github.com/gin-gonic/gin"
@@ -20,10 +18,22 @@ func NewRouter(ctl *ctl.Controller) (*Router, error) {
 func (p *Router) Idx() *gin.Engine {
 	r := gin.New()
 
-	account := r.Group("acc/v01")
+	orderer := r.Group("orderer/v01")
 	{
-		fmt.Println(account)
-		account.GET("/health", p.ct.Health)
+		orderer.GET("/menus")
+		orderer.GET("/menus/reviews")
+		orderer.POST("/menus/reviews")
+		orderer.POST("/order")
+		orderer.PUT("/order")
+		orderer.GET("/order/state")
+	}
+
+	receipient := r.Group("receipient/v01")
+	{
+		receipient.POST("/menus")
+		receipient.PUT("/menus")
+		receipient.DELETE("/menus")
+		receipient.GET("/order")
 	}
 	return r
 }
