@@ -2,73 +2,67 @@ package model
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Menu struct {
-	Name           string    `bson:"name"`
-	CanBeOrder     bool      `bson:"can_be_order"`
-	Quantity       int       `bson:"quantity"`
-	Price          int       `bson:"price"`
-	Origin         string    `bson:"origin"`
-	TodayRecommend bool      `bson:"today_recommend"`
-	CreatedAt      time.Time `bson:"created_at"`
-	UpdatedAt      time.Time `bson:"updated_at"`
-	IsDeleted      bool      `bson:"is_deleted"`
+type CreateOrderBody struct {
+	Phone    string   `validate:"required"`
+	Address  string   `validate:"required"`
+	MenuName []string `validate:"required"`
 }
 
-func (m *Model) CreateMenu(newMenu Menu) {
-	newMenu.IsDeleted = false
-	filter := bson.D{{Key: "name", Value: newMenu.Name}}
-	count, err := m.colMenu.CountDocuments(context.TODO(), filter)
+func (m *Model) CreateOrder(createOrderBody CreateOrderBody) error {
+	var orderer Orderer
+	orderer.Address = createOrderBody.Address
+	orderer.Phone = createOrderBody.Phone
+
+	var menu Menu
+	var arrMenuId []string
+
+	for _, value := range createOrderBody.MenuName {
+		filter := bson.D{{Key: "name", Value: value}}
+		m.colMenu.FindOne(context.TODO(), filter).Decode(&menu)
+		arrMenuId = append(arrMenuId, menu.Id.String())
+
+		if menu.Quantity > 0 {
+			updateFilter := bson.D{{Key: "name", Value: menu.Name}}
+			update := bson.D{{Key: "$set", Value: bson.D{{"quantity", menu.Quantity - 1}}}}
+			_, err := m.colMenu.UpdateOne(context.TODO(), updateFilter, update)
+
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		if menu.Quantity <= 0 || menu.CanBeOrder == false {
+			return errors.New("주문할 수 없는 메뉴")
+		}
+	}
+
+	ordererResult, err := m.colOrderer.InsertOne(context.TODO(), orderer)
 
 	if err != nil {
 		panic(err)
 	}
 
-	if count > 0 {
-		panic("이미 존재하는 이름입니다.")
-	}
+	count, _ := m.colOrder.CountDocuments(context.TODO(), bson.D{{}})
 
-	result, err := m.colMenu.InsertOne(context.TODO(), newMenu)
+	var order Order
+	order.State = 0
+	order.Numbering = int(count) + 1
+	order.OrdererId = ordererResult.InsertedID.(primitive.ObjectID).Hex()
+
+	order.MenuLists = arrMenuId
+	result, err := m.colOrder.InsertOne(context.TODO(), order)
 
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Printf("Document inserted with ID: %s\n", result.InsertedID)
-}
-
-func (m *Model) UpdateMenu(name string, menu Menu) {
-	filter := bson.D{{Key: "name", Value: name}}
-	update := bson.M{
-		"$set": bson.M{
-			"can_be_order":    menu.CanBeOrder,
-			"price":           menu.Price,
-			"origin":          menu.Origin,
-			"today_recommend": menu.TodayRecommend,
-		},
-	}
-
-	result, err := m.colMenu.UpdateOne(context.TODO(), filter, update)
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
-}
-
-func (m *Model) DeleteMenu(name string) {
-	filter := bson.D{{Key: "name", Value: name}}
-	update := bson.D{{Key: "$set", Value: bson.D{{"is_deleted", true}}}}
-	result, err := m.colMenu.UpdateOne(context.TODO(), filter, update)
-
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Documents Deleted: %v\n", result.ModifiedCount)
+	return nil
 }

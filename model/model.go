@@ -4,17 +4,20 @@ import (
 	"context"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Model struct {
-	client  *mongo.Client
-	colMenu *mongo.Collection
+	client        *mongo.Client
+	colMenu       *mongo.Collection
+	colOrder      *mongo.Collection
+	colOrderer    *mongo.Collection
+	colMenuReview *mongo.Collection
 }
 
 type Orderer struct {
-	Name      string    `bson:"name"`
 	Phone     string    `bson:"phone"`
 	Address   string    `bson:"address"`
 	CreatedAt time.Time `bson:"created_at"`
@@ -33,13 +36,14 @@ type MenuReview struct {
 }
 
 type Order struct {
-	Menu      Menu      `bson:"menu"`
-	Orderer   Orderer   `bson:"orderer"`
-	State     string    `bson:"state"`
-	Numbering int       `bson:"numbering"`
-	CreatedAt time.Time `bson:"created_at"`
-	UpdatedAt time.Time `bson:"updated_at"`
-	isDeleted bool      `bson:"is_deleted"`
+	Id        primitive.ObjectID `bson:"_id,omitempty"`
+	MenuLists []string           `bson:"menu_lists"`
+	OrdererId string             `bson:"orderer_id"`
+	State     int                `bson:"state"`
+	Numbering int                `bson:"numbering"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
+	isDeleted bool               `bson:"is_deleted"`
 }
 
 func NewModel() (*Model, error) {
@@ -55,6 +59,9 @@ func NewModel() (*Model, error) {
 	} else {
 		db := r.client.Database("online-ordering-system")
 		r.colMenu = db.Collection("tMenu")
+		r.colOrderer = db.Collection("tOrderer")
+		r.colOrder = db.Collection("tOrder")
+		r.colMenuReview = db.Collection("tOrder")
 	}
 	return r, nil
 }
