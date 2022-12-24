@@ -42,14 +42,6 @@ type Order struct {
 	isDeleted bool      `bson:"is_deleted"`
 }
 
-type Reorder struct {
-	Menu      Menu      `bson:"menu"`
-	Orderer   Orderer   `bson:"orderer"`
-	CreatedAt time.Time `bson:"created_at"`
-	UpdatedAt time.Time `bson:"updated_at"`
-	isDeleted bool      `bson:"is_deleted"`
-}
-
 func NewModel() (*Model, error) {
 	r := &Model{}
 

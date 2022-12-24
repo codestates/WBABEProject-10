@@ -21,13 +21,23 @@ func (p *Controller) NewMenu(c *gin.Context) {
 }
 
 func (p *Controller) UpdateMenu(c *gin.Context) {
-	id := c.Param("name")
+	name := c.Param("name")
 	var menu model.Menu
 	if err := c.ShouldBind(&menu); err != nil {
 		c.String(http.StatusBadRequest, "%v", err)
 		return
 	}
-	p.md.UpdateMenu(id, menu)
+	p.md.UpdateMenu(name, menu)
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "OK",
+	})
+}
+
+func (p *Controller) DeleteMenu(c *gin.Context) {
+	name := c.Param("name")
+
+	p.md.DeleteMenu(name)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "OK",
