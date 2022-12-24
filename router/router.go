@@ -18,22 +18,22 @@ func NewRouter(ctl *ctl.Controller) (*Router, error) {
 func (p *Router) Idx() *gin.Engine {
 	r := gin.New()
 
-	orderer := r.Group("orderer/v01")
+	// orderer := r.Group("orderer/v01")
 	{
-		orderer.GET("/menus")
-		orderer.GET("/menus/reviews")
-		orderer.POST("/menus/reviews")
-		orderer.POST("/order")
-		orderer.PUT("/order")
-		orderer.GET("/order/state")
+		// orderer.GET("/menus")
+		// orderer.GET("/menus/reviews")
+		// orderer.POST("/menus/reviews")
+		// orderer.POST("/order")
+		// orderer.PUT("/order")
+		// orderer.GET("/order/state")
 	}
 
 	receipient := r.Group("receipient/v01")
 	{
-		receipient.POST("/menus")
-		receipient.PUT("/menus")
-		receipient.DELETE("/menus")
-		receipient.GET("/order")
+		receipient.POST("/menus", p.ct.NewMenu)
+		// receipient.PUT("/menus")
+		// receipient.DELETE("/menus")
+		// receipient.GET("/order")
 	}
 	return r
 }

@@ -9,8 +9,8 @@ import (
 )
 
 type Model struct {
-	client   *mongo.Client
-	colOrder *mongo.Collection
+	client  *mongo.Client
+	colMenu *mongo.Collection
 }
 
 type Menu struct {
@@ -22,6 +22,7 @@ type Menu struct {
 	TodayRecommend bool      `bson:"today_recommend"`
 	CreatedAt      time.Time `bson:"created_at"`
 	UpdatedAt      time.Time `bson:"updated_at"`
+	isDeleted      bool      `bson:"is_deleted"`
 }
 
 type Orderer struct {
@@ -40,6 +41,7 @@ type MenuReview struct {
 	review        string    `bson:"review"`
 	CreatedAt     time.Time `bson:"created_at"`
 	UpdatedAt     time.Time `bson:"updated_at"`
+	isDeleted     bool      `bson:"is_deleted"`
 }
 
 type Order struct {
@@ -49,6 +51,7 @@ type Order struct {
 	Numbering int       `bson:"numbering"`
 	CreatedAt time.Time `bson:"created_at"`
 	UpdatedAt time.Time `bson:"updated_at"`
+	isDeleted bool      `bson:"is_deleted"`
 }
 
 type Reorder struct {
@@ -56,6 +59,7 @@ type Reorder struct {
 	Orderer   Orderer   `bson:"orderer"`
 	CreatedAt time.Time `bson:"created_at"`
 	UpdatedAt time.Time `bson:"updated_at"`
+	isDeleted bool      `bson:"is_deleted"`
 }
 
 func NewModel() (*Model, error) {
@@ -70,7 +74,7 @@ func NewModel() (*Model, error) {
 		return nil, err
 	} else {
 		db := r.client.Database("online-ordering-system")
-		r.colOrder = db.Collection("order")
+		r.colMenu = db.Collection("tMenu")
 	}
 	return r, nil
 }
