@@ -1,8 +1,6 @@
 package controller
 
-import (
-	"lecture/WBABEProject-10/model"
-)
+import "lecture/WBABEProject-10/model"
 
 type Controller struct {
 	md *model.Model

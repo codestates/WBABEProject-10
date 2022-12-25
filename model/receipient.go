@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"fmt"
+	"lecture/WBABEProject-10/util"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -36,9 +37,7 @@ func (m *Model) CreateMenu(newMenu Menu) {
 	filter := bson.D{{Key: "name", Value: newMenu.Name}}
 	count, err := m.colMenu.CountDocuments(context.TODO(), filter)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	if count > 0 {
 		panic("이미 존재하는 이름입니다.")
@@ -46,9 +45,7 @@ func (m *Model) CreateMenu(newMenu Menu) {
 
 	result, err := m.colMenu.InsertOne(context.TODO(), newMenu)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	fmt.Printf("Document inserted with ID: %s\n", result.InsertedID)
 }
@@ -66,9 +63,7 @@ func (m *Model) UpdateMenu(name string, menu Menu) {
 
 	result, err := m.colMenu.UpdateOne(context.TODO(), filter, update)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
 }
@@ -78,9 +73,8 @@ func (m *Model) DeleteMenu(name string) {
 	update := bson.D{{Key: "$set", Value: bson.D{{"is_deleted", true}}}}
 	result, err := m.colMenu.UpdateOne(context.TODO(), filter, update)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
+
 	fmt.Printf("Documents Deleted: %v\n", result.ModifiedCount)
 }
 
@@ -88,9 +82,7 @@ func (m *Model) GetOrders() []Order {
 	filter := bson.D{}
 	cursor, err := m.colOrder.Find(context.TODO(), filter)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	var orders []Order
 
@@ -122,9 +114,7 @@ func (m *Model) UpdateOrderState(orderId primitive.ObjectID) string {
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "state", Value: state}}}}
 	_, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	s := fmt.Sprintf("상태가 %x으로 변경되었습니다.", state)
 	return s

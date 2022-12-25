@@ -2,6 +2,7 @@ package controller
 
 import (
 	"lecture/WBABEProject-10/model"
+	"lecture/WBABEProject-10/util"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -60,9 +61,7 @@ func (p *Controller) AddOrder(c *gin.Context) {
 	v := validator.New()
 	err := v.Struct(addOrderBody)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	result := p.md.AddOrder(orderId, addOrderBody)
 
@@ -93,9 +92,7 @@ func (p *Controller) UpdateOrder(c *gin.Context) {
 	v := validator.New()
 	err := v.Struct(updateOrderBody)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	result := p.md.UpdateOrder(orderId, updateOrderBody)
 

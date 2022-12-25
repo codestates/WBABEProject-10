@@ -2,6 +2,7 @@ package controller
 
 import (
 	"lecture/WBABEProject-10/model"
+	"lecture/WBABEProject-10/util"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -59,9 +60,7 @@ func (p *Controller) UpdateOrderState(c *gin.Context) {
 
 	id, err := primitive.ObjectIDFromHex(orderId)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	result := p.md.UpdateOrderState(id)
 

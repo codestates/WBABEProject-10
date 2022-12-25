@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"lecture/WBABEProject-10/util"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -38,9 +39,7 @@ func (m *Model) GetMenus() []Menu {
 	filter := bson.D{}
 	cursor, err := m.colMenu.Find(context.TODO(), filter)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	var menu []Menu
 
@@ -55,9 +54,7 @@ func (m *Model) GetReviews() []Review {
 	filter := bson.D{}
 	cursor, err := m.colReview.Find(context.TODO(), filter)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	var review []Review
 
@@ -78,9 +75,7 @@ func (m *Model) GetOrderState(phone string, address string) []Order {
 	findFilter := bson.D{{Key: "orderer_id", Value: bson.D{{"$eq", id}}}}
 	cursor, err := m.colOrder.Find(context.TODO(), findFilter)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	var order []Order
 
@@ -113,9 +108,7 @@ func (m *Model) AddOrder(orderId primitive.ObjectID, addOrderBody AddOrderBody) 
 
 	result, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
 
@@ -137,9 +130,7 @@ func (m *Model) UpdateOrder(orderId primitive.ObjectID, updateOrderBody UpdateOr
 
 	result, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
 
@@ -163,9 +154,7 @@ func (m *Model) CreateReview(orderId primitive.ObjectID, createReviewBody Create
 
 	result, err := m.colReview.InsertOne(context.TODO(), review)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	fmt.Printf("Document inserted with ID: %s\n", result.InsertedID)
 }
@@ -188,9 +177,7 @@ func (m *Model) CreateOrder(createOrderBody CreateOrderBody) error {
 			update := bson.D{{Key: "$set", Value: bson.D{{"quantity", menu.Quantity - 1}}}}
 			_, err := m.colMenu.UpdateOne(context.TODO(), updateFilter, update)
 
-			if err != nil {
-				panic(err)
-			}
+			util.PanicHandler(err)
 		}
 
 		if menu.Quantity <= 0 || menu.CanBeOrder == false {
@@ -200,9 +187,7 @@ func (m *Model) CreateOrder(createOrderBody CreateOrderBody) error {
 
 	ordererResult, err := m.colOrderer.InsertOne(context.TODO(), orderer)
 
-	if err != nil {
-		panic(err)
-	}
+	util.PanicHandler(err)
 
 	count, _ := m.colOrder.CountDocuments(context.TODO(), bson.D{{}})
 
@@ -213,10 +198,8 @@ func (m *Model) CreateOrder(createOrderBody CreateOrderBody) error {
 
 	order.MenuLists = arrMenuId
 	result, err := m.colOrder.InsertOne(context.TODO(), order)
-
-	if err != nil {
-		panic(err)
-	}
+	
+	util.PanicHandler(err)
 
 	fmt.Printf("Document inserted with ID: %s\n", result.InsertedID)
 	return nil
