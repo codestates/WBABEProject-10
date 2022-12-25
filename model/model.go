@@ -10,11 +10,11 @@ import (
 )
 
 type Model struct {
-	client        *mongo.Client
-	colMenu       *mongo.Collection
-	colOrder      *mongo.Collection
-	colOrderer    *mongo.Collection
-	colMenuReview *mongo.Collection
+	client     *mongo.Client
+	colMenu    *mongo.Collection
+	colOrder   *mongo.Collection
+	colOrderer *mongo.Collection
+	colReview  *mongo.Collection
 }
 
 type Orderer struct {
@@ -26,14 +26,14 @@ type Orderer struct {
 }
 
 type Review struct {
-	MenuLists   []string           `bson:"menu"`
-	Orderer     primitive.ObjectID `bson:"orderer"`
-	Score       int                `bson:"score"`
-	IsRecommend bool               `bson:"is_recommend"`
-	Review      string             `bson:"review"`
-	CreatedAt   time.Time          `bson:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at"`
-	isDeleted   bool               `bson:"is_deleted"`
+	MenuLists   []string  `bson:"menu"`
+	Orderer     string    `bson:"orderer"`
+	Score       int       `bson:"score"`
+	IsRecommend bool      `bson:"is_recommend"`
+	Review      string    `bson:"review"`
+	CreatedAt   time.Time `bson:"created_at"`
+	UpdatedAt   time.Time `bson:"updated_at"`
+	isDeleted   bool      `bson:"is_deleted"`
 }
 
 type Order struct {
@@ -62,7 +62,7 @@ func NewModel() (*Model, error) {
 		r.colMenu = db.Collection("tMenu")
 		r.colOrderer = db.Collection("tOrderer")
 		r.colOrder = db.Collection("tOrder")
-		r.colMenuReview = db.Collection("tReview")
+		r.colReview = db.Collection("tReview")
 	}
 	return r, nil
 }

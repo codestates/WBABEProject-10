@@ -21,7 +21,7 @@ func (p *Router) Idx() *gin.Engine {
 	orderer := r.Group("orderer/v01")
 	{
 		// orderer.GET("/menus")
-		// orderer.GET("/menus/reviews")
+		orderer.GET("/menus/reviews", p.ct.GetReviews)
 		orderer.GET("/order/state", p.ct.GetOrderState)
 		orderer.POST("/menus/reviews/:orderId", p.ct.CreateReview)
 		orderer.POST("/order", p.ct.CreateOrder)

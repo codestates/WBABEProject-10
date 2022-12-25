@@ -15,6 +15,15 @@ type CreateReviewBody struct {
 	Review      string
 }
 
+func (p *Controller) GetReviews(c *gin.Context) {
+	result := p.md.GetReviews()
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg":    "OK",
+		"result": result,
+	})
+}
+
 func (p *Controller) GetOrderState(c *gin.Context) {
 	phone := c.Query("phone")
 	address := c.Query("address")

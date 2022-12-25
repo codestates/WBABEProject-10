@@ -34,6 +34,23 @@ type GetOrderStateBody struct {
 	Phone   string `validate:"required"`
 }
 
+func (m *Model) GetReviews() []Review {
+	filter := bson.D{}
+	cursor, err := m.colReview.Find(context.TODO(), filter)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var review []Review
+
+	if err = cursor.All(context.TODO(), &review); err != nil {
+		panic(err)
+	}
+
+	return review
+}
+
 func (m *Model) GetOrderState(phone string, address string) []Order {
 	var orderer Orderer
 	filter := bson.D{{Key: "phone", Value: phone}, {Key: "address", Value: address}}
@@ -124,10 +141,10 @@ func (m *Model) CreateReview(orderId primitive.ObjectID, createReviewBody Create
 	review.IsRecommend = createReviewBody.IsRecommend
 
 	ordererId, _ := primitive.ObjectIDFromHex(order.OrdererId)
-	review.Orderer = ordererId
+	review.Orderer = ordererId.String()
 	review.MenuLists = order.MenuLists
 
-	result, err := m.colMenuReview.InsertOne(context.TODO(), review)
+	result, err := m.colReview.InsertOne(context.TODO(), review)
 
 	if err != nil {
 		panic(err)
