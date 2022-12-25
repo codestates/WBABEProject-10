@@ -15,6 +15,36 @@ type CreateOrderBody struct {
 	MenuName []string `validate:"required"`
 }
 
+type CreateReviewBody struct {
+	Score       int
+	IsRecommend bool
+	Review      string
+}
+
+func (m *Model) CreateReview(orderId primitive.ObjectID, createReviewBody CreateReviewBody) {
+	var review Review
+	order := &Order{}
+
+	filter := bson.D{{Key: "_id", Value: orderId}}
+	m.colOrder.FindOne(context.TODO(), filter).Decode(order)
+
+	review.Review = createReviewBody.Review
+	review.Score = createReviewBody.Score
+	review.IsRecommend = createReviewBody.IsRecommend
+
+	ordererId, _ := primitive.ObjectIDFromHex(order.OrdererId)
+	review.Orderer = ordererId
+	review.MenuLists = order.MenuLists
+
+	result, err := m.colMenuReview.InsertOne(context.TODO(), review)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Document inserted with ID: %s\n", result.InsertedID)
+}
+
 func (m *Model) CreateOrder(createOrderBody CreateOrderBody) error {
 	var orderer Orderer
 	orderer.Address = createOrderBody.Address

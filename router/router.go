@@ -22,7 +22,7 @@ func (p *Router) Idx() *gin.Engine {
 	{
 		// orderer.GET("/menus")
 		// orderer.GET("/menus/reviews")
-		// orderer.POST("/menus/reviews")
+		orderer.POST("/menus/reviews/:orderId", p.ct.CreateReview)
 		orderer.POST("/order", p.ct.CreateOrder)
 		// orderer.PUT("/order")
 		// orderer.GET("/order/state")

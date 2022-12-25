@@ -6,7 +6,33 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type CreateReviewBody struct {
+	Score       int
+	IsRecommend bool
+	Review      string
+}
+
+func (p *Controller) CreateReview(c *gin.Context) {
+	orderId := c.Param("orderId")
+
+	id, _ := primitive.ObjectIDFromHex(orderId)
+
+	var createReviewBody model.CreateReviewBody
+
+	if err := c.ShouldBind(&createReviewBody); err != nil {
+		c.String(http.StatusBadRequest, "%v", err)
+		return
+	}
+
+	p.md.CreateReview(id, createReviewBody)
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "OK",
+	})
+}
 
 func (p *Controller) CreateOrder(c *gin.Context) {
 	var createOrderBody model.CreateOrderBody

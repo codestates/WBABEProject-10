@@ -18,21 +18,22 @@ type Model struct {
 }
 
 type Orderer struct {
-	Phone     string    `bson:"phone"`
-	Address   string    `bson:"address"`
-	CreatedAt time.Time `bson:"created_at"`
-	UpdatedAt time.Time `bson:"updated_at"`
+	Id        primitive.ObjectID `bson:"_id"`
+	Phone     string             `bson:"phone"`
+	Address   string             `bson:"address"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
 }
 
-type MenuReview struct {
-	Menu          Menu      `bson:"menu"`
-	Orderer       Orderer   `bson:"orderer"`
-	Score         int       `bson:"score"`
-	IsRecommended bool      `bson:"is_recommended"`
-	review        string    `bson:"review"`
-	CreatedAt     time.Time `bson:"created_at"`
-	UpdatedAt     time.Time `bson:"updated_at"`
-	isDeleted     bool      `bson:"is_deleted"`
+type Review struct {
+	MenuLists   []string           `bson:"menu"`
+	Orderer     primitive.ObjectID `bson:"orderer"`
+	Score       int                `bson:"score"`
+	IsRecommend bool               `bson:"is_recommend"`
+	Review      string             `bson:"review"`
+	CreatedAt   time.Time          `bson:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at"`
+	isDeleted   bool               `bson:"is_deleted"`
 }
 
 type Order struct {
@@ -61,7 +62,7 @@ func NewModel() (*Model, error) {
 		r.colMenu = db.Collection("tMenu")
 		r.colOrderer = db.Collection("tOrderer")
 		r.colOrder = db.Collection("tOrder")
-		r.colMenuReview = db.Collection("tOrder")
+		r.colMenuReview = db.Collection("tReview")
 	}
 	return r, nil
 }
