@@ -34,6 +34,23 @@ type GetOrderStateBody struct {
 	Phone   string `validate:"required"`
 }
 
+func (m *Model) GetMenus() []Menu {
+	filter := bson.D{}
+	cursor, err := m.colMenu.Find(context.TODO(), filter)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var menu []Menu
+
+	if err = cursor.All(context.TODO(), &menu); err != nil {
+		panic(err)
+	}
+
+	return menu
+}
+
 func (m *Model) GetReviews() []Review {
 	filter := bson.D{}
 	cursor, err := m.colReview.Find(context.TODO(), filter)
