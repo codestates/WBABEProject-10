@@ -33,7 +33,7 @@ func (p *Router) Idx() *gin.Engine {
 		receipient.POST("/menus", p.ct.NewMenu)
 		receipient.PUT("/menus/:name", p.ct.UpdateMenu)
 		receipient.DELETE("/menus/:name", p.ct.DeleteMenu)
-		// receipient.GET("/order")
+		receipient.GET("/order", p.ct.GetOrders)
 	}
 	return r
 }

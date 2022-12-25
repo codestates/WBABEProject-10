@@ -22,6 +22,15 @@ type Menu struct {
 	IsDeleted      bool               `bson:"is_deleted"`
 }
 
+type GetOrdersResponse struct {
+	Id        primitive.ObjectID
+	MenuLists []Menu
+	Orderer   Orderer
+	State     int
+	Numbering int
+	CreatedAt time.Time
+}
+
 func (m *Model) CreateMenu(newMenu Menu) {
 	newMenu.IsDeleted = false
 	filter := bson.D{{Key: "name", Value: newMenu.Name}}
@@ -73,4 +82,21 @@ func (m *Model) DeleteMenu(name string) {
 		panic(err)
 	}
 	fmt.Printf("Documents Deleted: %v\n", result.ModifiedCount)
+}
+
+func (m *Model) GetOrders() []Order {
+	filter := bson.D{}
+	cursor, err := m.colOrder.Find(context.TODO(), filter)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var orders []Order
+
+	if err = cursor.All(context.TODO(), &orders); err != nil {
+		panic(err)
+	}
+
+	return orders
 }

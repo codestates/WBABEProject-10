@@ -43,3 +43,12 @@ func (p *Controller) DeleteMenu(c *gin.Context) {
 		"msg": "OK",
 	})
 }
+
+func (p *Controller) GetOrders(c *gin.Context) {
+	result := p.md.GetOrders()
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg":    "OK",
+		"result": result,
+	})
+}
