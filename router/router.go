@@ -4,6 +4,11 @@ import (
 	ctl "lecture/WBABEProject-10/controller"
 
 	"github.com/gin-gonic/gin"
+
+	"lecture/WBABEProject-10/docs"
+
+	swgFiles "github.com/swaggo/files"
+	ginSwg "github.com/swaggo/gin-swagger"
 )
 
 type Router struct {
@@ -16,17 +21,20 @@ func NewRouter(ctl *ctl.Controller) (*Router, error) {
 }
 
 func (p *Router) Idx() *gin.Engine {
-	r := gin.New()
+	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(CORS())
 
+	r.GET("/swagger/:any", ginSwg.WrapHandler(swgFiles.Handler))
+	docs.SwaggerInfo.Host = "localhost"
+
 	orderer := r.Group("orderer/v01")
 	{
 		orderer.GET("/menus", p.ct.GetMenus)
-		orderer.GET("/menus/reviews", p.ct.GetReviews)
+		orderer.GET("/reviews", p.ct.GetReviews)
 		orderer.GET("/order/state", p.ct.GetOrderState)
-		orderer.POST("/menus/reviews/:orderId", p.ct.CreateReview)
+		orderer.POST("/reviews/:orderId", p.ct.CreateReview)
 		orderer.POST("/order", p.ct.CreateOrder)
 		orderer.PUT("/order/:id", p.ct.UpdateOrder)
 		orderer.PATCH("/order/:id", p.ct.AddOrder)

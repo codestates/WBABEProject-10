@@ -10,31 +10,18 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Menu struct {
-	Id             primitive.ObjectID `bson:"_id,omitempty"`
-	Name           string             `bson:"name"`
-	CanBeOrder     bool               `bson:"can_be_order"`
-	Quantity       int                `bson:"quantity"`
-	Price          int                `bson:"price"`
-	Origin         string             `bson:"origin"`
-	TodayRecommend bool               `bson:"today_recommend"`
-	CreatedAt      time.Time          `bson:"created_at"`
-	UpdatedAt      time.Time          `bson:"updated_at"`
-	IsDeleted      bool               `bson:"is_deleted"`
-}
-
 type GetOrdersResponse struct {
-	Id        primitive.ObjectID
-	MenuLists []Menu
-	Orderer   Orderer
-	State     int
-	Numbering int
-	CreatedAt time.Time
+	id        primitive.ObjectID
+	menuLists []Menu
+	orderer   Orderer
+	state     int
+	numbering int
+	createdAt time.Time
 }
 
 func (m *Model) CreateMenu(newMenu Menu) {
-	newMenu.IsDeleted = false
-	filter := bson.D{{Key: "name", Value: newMenu.Name}}
+	newMenu.isDeleted = false
+	filter := bson.D{{Key: "name", Value: newMenu.name}}
 	count, err := m.colMenu.CountDocuments(context.TODO(), filter)
 
 	util.PanicHandler(err)
@@ -54,10 +41,10 @@ func (m *Model) UpdateMenu(name string, menu Menu) {
 	filter := bson.D{{Key: "name", Value: name}}
 	update := bson.M{
 		"$set": bson.M{
-			"can_be_order":    menu.CanBeOrder,
-			"price":           menu.Price,
-			"origin":          menu.Origin,
-			"today_recommend": menu.TodayRecommend,
+			"can_be_order":    menu.canBeOrder,
+			"price":           menu.price,
+			"origin":          menu.origin,
+			"today_recommend": menu.todayRecommend,
 		},
 	}
 
@@ -100,13 +87,13 @@ func (m *Model) UpdateOrderState(orderId primitive.ObjectID) string {
 	m.colOrder.FindOne(context.TODO(), filter).Decode(order)
 
 	var state int
-	if order.State == 3 {
+	if order.state == 3 {
 		return "배달 완료된 상태입니다."
-	} else if order.State == 0 {
+	} else if order.state == 0 {
 		state = 1
-	} else if order.State == 1 {
+	} else if order.state == 1 {
 		state = 2
-	} else if order.State == 2 {
+	} else if order.state == 2 {
 		state = 3
 	}
 

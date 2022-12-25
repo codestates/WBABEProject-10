@@ -16,6 +16,14 @@ type CreateReviewBody struct {
 	Review      string
 }
 
+// GetMenus godoc
+// @Summary call GetMenus, return ok by json.
+// @Description 메뉴 조회 기능
+// @name GetMenus
+// @Accept  json
+// @Produce  json
+// @Router /orderer/v01/menus [get]
+// @Success 200 {object} Controller
 func (p *Controller) GetMenus(c *gin.Context) {
 	result := p.md.GetMenus()
 
@@ -25,6 +33,14 @@ func (p *Controller) GetMenus(c *gin.Context) {
 	})
 }
 
+// GetReviews godoc
+// @Summary call GetReviews, return ok by json.
+// @Description 리뷰 조회 기능
+// @name GetReviews
+// @Accept  json
+// @Produce  json
+// @Router /orderer/v01/reviews [get]
+// @Success 200 {object} Controller
 func (p *Controller) GetReviews(c *gin.Context) {
 	result := p.md.GetReviews()
 
@@ -34,6 +50,16 @@ func (p *Controller) GetReviews(c *gin.Context) {
 	})
 }
 
+// GetOrderState godoc
+// @Summary call GetOrderState, return ok by json.
+// @Description 주문 상태 조회 기능
+// @name GetOrderState
+// @Accept  json
+// @Produce  json
+// @Param phone query string true "phone"
+// @Param address query string true "address"
+// @Router /orderer/v01/order/state [get]
+// @Success 200 {object} Controller
 func (p *Controller) GetOrderState(c *gin.Context) {
 	phone := c.Query("phone")
 	address := c.Query("address")
@@ -46,6 +72,15 @@ func (p *Controller) GetOrderState(c *gin.Context) {
 	})
 }
 
+// AddOrder godoc
+// @Summary call AddOrder, return ok by json.
+// @Description 주문을 추가하는 기능
+// @name AddOrder
+// @Accept  json
+// @Produce  json
+// @Param id path string true "id"
+// @Router /orderer/v01/order/{id} [patch]
+// @Success 200 {object} Controller
 func (p *Controller) AddOrder(c *gin.Context) {
 	id := c.Param("id")
 
@@ -77,6 +112,15 @@ func (p *Controller) AddOrder(c *gin.Context) {
 	})
 }
 
+// UpdateOrder godoc
+// @Summary call AddOrder, return ok by json.
+// @Description 주문 수정 기능
+// @name UpdateOrder
+// @Accept  json
+// @Produce  json
+// @Param id path string true "id"
+// @Router /orderer/v01/order/{id} [put]
+// @Success 200 {object} Controller
 func (p *Controller) UpdateOrder(c *gin.Context) {
 	id := c.Param("id")
 
@@ -108,6 +152,15 @@ func (p *Controller) UpdateOrder(c *gin.Context) {
 	})
 }
 
+// CreateReview godoc
+// @Summary call CreateReview, return ok by json.
+// @Description 리뷰 기능
+// @name CreateReview
+// @Accept  json
+// @Produce  json
+// @Param orderId path string true "orderId"
+// @Router /orderer/v01/reviews/{orderId} [post]
+// @Success 200 {object} Controller
 func (p *Controller) CreateReview(c *gin.Context) {
 	orderId := c.Param("orderId")
 
@@ -127,6 +180,17 @@ func (p *Controller) CreateReview(c *gin.Context) {
 	})
 }
 
+// CreateOrder godoc
+// @Summary call CreateOrder, return ok by json.
+// @Description 주문 기능
+// @name CreateOrder
+// @Accept  json
+// @Produce  json
+// @Param phone body string true "phone"
+// @Param address body string true "address"
+// @Param menuName body []string true "menuName"
+// @Router /orderer/v01/order [post]
+// @Success 200 {object} Controller
 func (p *Controller) CreateOrder(c *gin.Context) {
 	var createOrderBody model.CreateOrderBody
 

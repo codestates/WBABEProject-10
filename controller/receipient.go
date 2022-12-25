@@ -9,6 +9,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// NewMenu godoc
+// @Summary call NewMenu, return ok by json.
+// @Description 메뉴 추가 가능
+// @name NewMenu
+// @Accept  json
+// @Produce  json
+// @Param name body string true "name"
+// @Param canBeOrder body bool true "canBeOrder"
+// @Param quantity body int true "quantity"
+// @Param price body int true "price"
+// @Param origin body string true "origin"
+// @Param todayRecommend body bool true "todayRecommend"
+// @Router /receipient/v01/menus [post]
+// @Success 200 {object} Controller
 func (p *Controller) NewMenu(c *gin.Context) {
 	var menu model.Menu
 
@@ -22,6 +36,19 @@ func (p *Controller) NewMenu(c *gin.Context) {
 	})
 }
 
+// UpdateMenu godoc
+// @Summary call UpdateMenu, return ok by json.
+// @Description 메뉴 업데이트 가능
+// @name UpdateMenu
+// @Accept  json
+// @Produce  json
+// @Param name path string true "name"
+// @Param canBeOrder body bool true "canBeOrder"
+// @Param price body int true "price"
+// @Param origin body string true "origin"
+// @Param todayRecommend body bool true "todayRecommend"
+// @Router /receipient/v01/menus/{name} [patch]
+// @Success 200 {object} Controller
 func (p *Controller) UpdateMenu(c *gin.Context) {
 	name := c.Param("name")
 	var menu model.Menu
@@ -36,6 +63,15 @@ func (p *Controller) UpdateMenu(c *gin.Context) {
 	})
 }
 
+// DeleteMenu godoc
+// @Summary call DeleteMenu, return ok by json.
+// @Description 메뉴 삭제 기능
+// @name DeleteMenu
+// @Accept  json
+// @Produce  json
+// @Param name path string true "name"
+// @Router /receipient/v01/menus/{name} [delete]
+// @Success 200 {object} Controller
 func (p *Controller) DeleteMenu(c *gin.Context) {
 	name := c.Param("name")
 
@@ -46,6 +82,14 @@ func (p *Controller) DeleteMenu(c *gin.Context) {
 	})
 }
 
+// GetOrders godoc
+// @Summary call GetOrders, return ok by json.
+// @Description 주문 조회 기능
+// @name GetOrders
+// @Accept  json
+// @Produce  json
+// @Router /receipient/v01/order [get]
+// @Success 200 {object} Controller
 func (p *Controller) GetOrders(c *gin.Context) {
 	result := p.md.GetOrders()
 
@@ -55,6 +99,16 @@ func (p *Controller) GetOrders(c *gin.Context) {
 	})
 }
 
+
+// UpdateOrderState godoc
+// @Summary call UpdateOrderState, return ok by json.
+// @Description 주문 상태 업데이트 기능
+// @name UpdateOrderState
+// @Accept  json
+// @Produce  json
+// @Param id path string true "id"
+// @Router /receipient/v01/order/{id}/state [patch]
+// @Success 200 {object} Controller
 func (p *Controller) UpdateOrderState(c *gin.Context) {
 	orderId := c.Param("id")
 
