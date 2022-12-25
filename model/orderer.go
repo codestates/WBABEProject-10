@@ -21,6 +21,97 @@ type CreateReviewBody struct {
 	Review      string
 }
 
+type UpdateOrderBody struct {
+	MenuName []string `validate:"required"`
+}
+
+type AddOrderBody struct {
+	MenuName []string `validate:"required"`
+}
+
+type GetOrderStateBody struct {
+	Address string `validate:"required"`
+	Phone   string `validate:"required"`
+}
+
+func (m *Model) GetOrderState(phone string, address string) []Order {
+	var orderer Orderer
+	filter := bson.D{{Key: "phone", Value: phone}, {Key: "address", Value: address}}
+	m.colOrderer.FindOne(context.TODO(), filter).Decode(&orderer)
+
+	id := orderer.Id.Hex()
+
+	findFilter := bson.D{{Key: "orderer_id", Value: bson.D{{"$eq", id}}}}
+	cursor, err := m.colOrder.Find(context.TODO(), findFilter)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var order []Order
+
+	if err = cursor.All(context.TODO(), &order); err != nil {
+		panic(err)
+	}
+
+	return order
+}
+
+func (m *Model) AddOrder(orderId primitive.ObjectID, addOrderBody AddOrderBody) error {
+	var order Order
+
+	filter := bson.D{{Key: "_id", Value: orderId}}
+	m.colOrder.FindOne(context.TODO(), filter).Decode(&order)
+
+	if order.State != 0 && order.State != 1 {
+		return errors.New("주문을 추가할 수 없습니다.")
+	}
+
+	order.MenuLists = append(order.MenuLists, addOrderBody.MenuName...)
+
+	updateFilter := bson.D{{Key: "_id", Value: orderId}}
+	update := bson.M{
+		"$set": bson.M{
+			"menu_lists": order.MenuLists,
+			"state":      0,
+		},
+	}
+
+	result, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
+
+	return nil
+}
+
+func (m *Model) UpdateOrder(orderId primitive.ObjectID, updateOrderBody UpdateOrderBody) error {
+	var order Order
+
+	filter := bson.D{{Key: "_id", Value: orderId}}
+	m.colOrder.FindOne(context.TODO(), filter).Decode(&order)
+
+	if order.State != 0 {
+		return errors.New("주문을 변경할 수 없습니다.")
+	}
+
+	updateFilter := bson.D{{"_id", orderId}}
+	update := bson.D{{"$set", bson.D{{"menu_lists", updateOrderBody.MenuName}}}}
+
+	result, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Documents updated: %v\n", result.ModifiedCount)
+
+	return nil
+}
+
 func (m *Model) CreateReview(orderId primitive.ObjectID, createReviewBody CreateReviewBody) {
 	var review Review
 	order := &Order{}

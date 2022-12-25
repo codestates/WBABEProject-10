@@ -22,10 +22,11 @@ func (p *Router) Idx() *gin.Engine {
 	{
 		// orderer.GET("/menus")
 		// orderer.GET("/menus/reviews")
+		orderer.GET("/order/state", p.ct.GetOrderState)
 		orderer.POST("/menus/reviews/:orderId", p.ct.CreateReview)
 		orderer.POST("/order", p.ct.CreateOrder)
-		// orderer.PUT("/order")
-		// orderer.GET("/order/state")
+		orderer.PUT("/order/:id", p.ct.UpdateOrder)
+		orderer.PATCH("/order/:id", p.ct.AddOrder)
 	}
 
 	receipient := r.Group("receipient/v01")
