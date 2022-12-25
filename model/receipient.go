@@ -4,24 +4,14 @@ import (
 	"context"
 	"fmt"
 	"lecture/WBABEProject-10/util"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type GetOrdersResponse struct {
-	id        primitive.ObjectID
-	menuLists []Menu
-	orderer   Orderer
-	state     int
-	numbering int
-	createdAt time.Time
-}
-
 func (m *Model) CreateMenu(newMenu Menu) {
-	newMenu.isDeleted = false
-	filter := bson.D{{Key: "name", Value: newMenu.name}}
+	newMenu.IsDeleted = false
+	filter := bson.D{{Key: "name", Value: newMenu.Name}}
 	count, err := m.colMenu.CountDocuments(context.TODO(), filter)
 
 	util.PanicHandler(err)
@@ -41,10 +31,10 @@ func (m *Model) UpdateMenu(name string, menu Menu) {
 	filter := bson.D{{Key: "name", Value: name}}
 	update := bson.M{
 		"$set": bson.M{
-			"can_be_order":    menu.canBeOrder,
-			"price":           menu.price,
-			"origin":          menu.origin,
-			"today_recommend": menu.todayRecommend,
+			"can_be_order":    menu.CanBeOrder,
+			"price":           menu.Price,
+			"origin":          menu.Origin,
+			"today_recommend": menu.TodayRecommend,
 		},
 	}
 
@@ -87,13 +77,13 @@ func (m *Model) UpdateOrderState(orderId primitive.ObjectID) string {
 	m.colOrder.FindOne(context.TODO(), filter).Decode(order)
 
 	var state int
-	if order.state == 3 {
+	if order.State == 3 {
 		return "배달 완료된 상태입니다."
-	} else if order.state == 0 {
+	} else if order.State == 0 {
 		state = 1
-	} else if order.state == 1 {
+	} else if order.State == 1 {
 		state = 2
-	} else if order.state == 2 {
+	} else if order.State == 2 {
 		state = 3
 	}
 

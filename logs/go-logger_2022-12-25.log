@@ -8,3 +8,6 @@
 {"level":"DEBUG","time":"2022-12-25T21:40:42.835+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
 {"level":"DEBUG","time":"2022-12-25T21:52:18.936+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
 {"level":"DEBUG","time":"2022-12-25T22:06:57.176+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
+{"level":"DEBUG","time":"2022-12-25T22:19:42.542+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
+{"level":"DEBUG","time":"2022-12-25T22:21:55.024+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
+{"level":"DEBUG","time":"2022-12-25T22:25:20.988+0900","caller":"logger/logger.go:53","msg":"debug","-":"ready server.... "}
