@@ -119,6 +119,7 @@ func (p *Controller) AddOrder(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
+// @Param MenuName body []string true "MenuName"
 // @Router /orderer/v01/order/{id} [put]
 // @Success 200 {object} Controller
 func (p *Controller) UpdateOrder(c *gin.Context) {
@@ -159,6 +160,9 @@ func (p *Controller) UpdateOrder(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param orderId path string true "orderId"
+// @Param Score body int true "Score"
+// @Param IsRecommend bool string true "IsRecommend"
+// @Param Review path string true "Review"
 // @Router /orderer/v01/reviews/{orderId} [post]
 // @Success 200 {object} Controller
 func (p *Controller) CreateReview(c *gin.Context) {
@@ -186,9 +190,9 @@ func (p *Controller) CreateReview(c *gin.Context) {
 // @name CreateOrder
 // @Accept  json
 // @Produce  json
-// @Param phone body string true "phone"
-// @Param address body string true "address"
-// @Param menuName body []string true "menuName"
+// @Param Phone body string true "Phone"
+// @Param Address body string true "Address"
+// @Param MenuName body []string true "MenuName"
 // @Router /orderer/v01/order [post]
 // @Success 200 {object} Controller
 func (p *Controller) CreateOrder(c *gin.Context) {

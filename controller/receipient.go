@@ -15,12 +15,12 @@ import (
 // @name NewMenu
 // @Accept  json
 // @Produce  json
-// @Param name body string true "name"
-// @Param canBeOrder body bool true "canBeOrder"
-// @Param quantity body int true "quantity"
-// @Param price body int true "price"
-// @Param origin body string true "origin"
-// @Param todayRecommend body bool true "todayRecommend"
+// @Param Name body string true "Name"
+// @Param CanBeOrder body bool true "CanBeOrder"
+// @Param Quantity body int true "Quantity"
+// @Param Price body int true "Price"
+// @Param Origin body string true "Origin"
+// @Param TodayRecommend body bool true "TodayRecommend"
 // @Router /receipient/v01/menus [post]
 // @Success 200 {object} Controller
 func (p *Controller) NewMenu(c *gin.Context) {
@@ -43,10 +43,10 @@ func (p *Controller) NewMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param name path string true "name"
-// @Param canBeOrder body bool true "canBeOrder"
-// @Param price body int true "price"
-// @Param origin body string true "origin"
-// @Param todayRecommend body bool true "todayRecommend"
+// @Param CanBeOrder body bool true "CanBeOrder"
+// @Param Price body int true "Price"
+// @Param Origin body string true "Origin"
+// @Param TodayRecommend body bool true "TodayRecommend"
 // @Router /receipient/v01/menus/{name} [patch]
 // @Success 200 {object} Controller
 func (p *Controller) UpdateMenu(c *gin.Context) {
