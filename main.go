@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"lecture/WBABEProject-10/logger"
 	rt "lecture/WBABEProject-10/router"
 
 	"lecture/WBABEProject-10/model"
@@ -17,6 +19,8 @@ import (
 	ctl "lecture/WBABEProject-10/controller"
 
 	"golang.org/x/sync/errgroup"
+
+	conf "lecture/WBABEProject-10/config"
 )
 
 var (
@@ -24,6 +28,17 @@ var (
 )
 
 func main() {
+	var configFlag = flag.String("config", "./config/config.toml", "toml file to use for configuration")
+	flag.Parse()
+	cf := conf.NewConfig(*configFlag)
+
+	if err := logger.InitLogger(cf); err != nil {
+		fmt.Printf("init logger failed, err:%v\n", err)
+		return
+	}
+
+	logger.Debug("ready server....")
+
 	if mod, err := model.NewModel(); err != nil {
 		panic(err)
 	} else if controller, err := ctl.NewCTL(mod); err != nil {
