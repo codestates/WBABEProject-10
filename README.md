@@ -64,5 +64,9 @@ go run main.go
 - 생성일(created_at): date
 
 # API 명세
+
+## Swagger 명세 확인
+- 프로젝트 실행 후 http://localhost:8080/swagger/index.html#/로 접속
+
 <img width="958" alt="image" src="https://user-images.githubusercontent.com/80724255/209470515-b0a611f8-9667-4654-b6fd-b5d0acf683fa.png">
 
