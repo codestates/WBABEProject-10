@@ -1,0 +1,9 @@
+[log]
+level = "debug"
+fpath = "./logs/go-logger"
+msize = 2000  
+mage = 7     
+mbackup = 5 
+
+[server]
+port = ":8080"
