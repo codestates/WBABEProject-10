@@ -100,3 +100,32 @@ func (m *Model) GetOrders() []Order {
 
 	return orders
 }
+
+func (m *Model) UpdateOrderState(orderId primitive.ObjectID) string {
+	order := &Order{}
+
+	filter := bson.D{{Key: "_id", Value: orderId}}
+	m.colOrder.FindOne(context.TODO(), filter).Decode(order)
+
+	var state int
+	if order.State == 3 {
+		return "배달 완료된 상태입니다."
+	} else if order.State == 0 {
+		state = 1
+	} else if order.State == 1 {
+		state = 2
+	} else if order.State == 2 {
+		state = 3
+	}
+
+	updateFilter := bson.D{{Key: "_id", Value: orderId}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "state", Value: state}}}}
+	_, err := m.colOrder.UpdateOne(context.TODO(), updateFilter, update)
+
+	if err != nil {
+		panic(err)
+	}
+
+	s := fmt.Sprintf("상태가 %x으로 변경되었습니다.", state)
+	return s
+}

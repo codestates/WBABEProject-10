@@ -36,7 +36,7 @@ type MenuReview struct {
 }
 
 type Order struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty"`
+	Id        primitive.ObjectID `bson:"_id"`
 	MenuLists []string           `bson:"menu_lists"`
 	OrdererId string             `bson:"orderer_id"`
 	State     int                `bson:"state"`

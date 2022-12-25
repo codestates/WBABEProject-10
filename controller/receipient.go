@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (p *Controller) NewMenu(c *gin.Context) {
@@ -46,6 +47,23 @@ func (p *Controller) DeleteMenu(c *gin.Context) {
 
 func (p *Controller) GetOrders(c *gin.Context) {
 	result := p.md.GetOrders()
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg":    "OK",
+		"result": result,
+	})
+}
+
+func (p *Controller) UpdateOrderState(c *gin.Context) {
+	orderId := c.Param("id")
+
+	id, err := primitive.ObjectIDFromHex(orderId)
+
+	if err != nil {
+		panic(err)
+	}
+
+	result := p.md.UpdateOrderState(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg":    "OK",

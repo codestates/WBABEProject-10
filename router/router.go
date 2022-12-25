@@ -31,9 +31,10 @@ func (p *Router) Idx() *gin.Engine {
 	receipient := r.Group("receipient/v01")
 	{
 		receipient.POST("/menus", p.ct.NewMenu)
-		receipient.PUT("/menus/:name", p.ct.UpdateMenu)
+		receipient.PATCH("/menus/:name", p.ct.UpdateMenu)
 		receipient.DELETE("/menus/:name", p.ct.DeleteMenu)
 		receipient.GET("/order", p.ct.GetOrders)
+		receipient.PATCH("/order/:id/state", p.ct.UpdateOrderState)
 	}
 	return r
 }
