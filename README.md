@@ -70,3 +70,55 @@ go run main.go
 
 <img width="958" alt="image" src="https://user-images.githubusercontent.com/80724255/209470515-b0a611f8-9667-4654-b6fd-b5d0acf683fa.png">
 
+## 피주문자 API
+
+### 메뉴 추가
+- [POST] /receipient/v01/menus
+<img width="847" alt="image" src="https://user-images.githubusercontent.com/80724255/209675596-3e5dd964-864e-4187-8b7a-863f345cc423.png">
+
+### 메뉴 삭제
+- [DELETE] /receipient/v01/menus/{name}
+<img width="856" alt="image" src="https://user-images.githubusercontent.com/80724255/209677634-41fabf79-31bd-4d3c-b321-0ef4b734df8d.png">
+
+### 메뉴 수정
+- [PATCH] /receipient/v01/menus/{name}
+<img width="843" alt="image" src="https://user-images.githubusercontent.com/80724255/209678020-a411d8dd-d89d-4699-803a-bcd43c20556c.png">
+
+### 주문 상태 변경
+- [PATCH] /receipient/v01/order/{id}/state
+<img width="851" alt="image" src="https://user-images.githubusercontent.com/80724255/209676205-f74b2936-830e-45fe-ac86-1c965d5d927f.png">
+
+### 주문 확인
+- [GET] /receipient/v01/order
+<img width="858" alt="image" src="https://user-images.githubusercontent.com/80724255/209676701-0718330c-f272-49f8-8aa7-75751d2f1576.png">
+
+### 주문자 API
+
+### 주문 기능
+- [POST]
+<img width="855" alt="image" src="https://user-images.githubusercontent.com/80724255/209678564-e95017b1-8717-40fa-8f48-637c6b53bfd0.png">
+
+### 주문 추가
+- [PATCH] /orderer/v01/order/{id}
+<img width="851" alt="image" src="https://user-images.githubusercontent.com/80724255/209676552-e0eb823f-e7bd-4a3c-9973-2069d0a54fd9.png">
+
+### 주문 수정
+- [PUT] /orderer/v01/order/{id}
+<img width="853" alt="image" src="https://user-images.githubusercontent.com/80724255/209676410-03f11f13-bb7e-498d-9cd4-73dd454a95ec.png">
+
+### 메뉴 조회
+- [GET] /orderer/v01/menus
+<img width="854" alt="image" src="https://user-images.githubusercontent.com/80724255/209675860-7addc3da-6804-4c9c-b41f-02ed18a6c6a9.png">
+
+### 주문 상태 확인
+- [GET] /orderer/v01/order/state?phone={phone}&address={address}
+<img width="844" alt="image" src="https://user-images.githubusercontent.com/80724255/209675993-cbf24676-58d3-45da-bbee-9d2a90bedab9.png">
+
+### 리뷰 생성
+- [POST] /orderer/v01/reviews/{orderId}
+<img width="854" alt="image" src="https://user-images.githubusercontent.com/80724255/209676862-746bcd3b-63fa-4da0-9482-0fae9b23fc69.png">
+
+### 리뷰 조회
+- [GET] /orderer/v01/reviews
+<img width="853" alt="image" src="https://user-images.githubusercontent.com/80724255/209677106-58c3c26d-c52b-4246-9e6c-c769721cc256.png">
+
