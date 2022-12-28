@@ -95,4 +95,26 @@ func (m *Model) UpdateOrderState(orderId primitive.ObjectID) string {
 
 	s := fmt.Sprintf("상태가 %x으로 변경되었습니다.", state)
 	return s
+	/* [코드리뷰]
+	 * 조건문을 통해 분기를 잘 태워주셨습니다.
+	 * 또한 key,value 방식으로 state도 잘 구현해주셨습니다.
+	 * 그러나 해당 코드에는 return도 발생이 되고, panic도 발생할 것입니다.
+	 * 해당 코드를 호출하는 다른 코드에서는 어떤 일이 일어날 지 예상할 수 없는 코드로 보여집니다.
+	 * 항상 function에서 발생하는 일들이 예상가능한 획일적인 return이 이루어지게 만들어주어야 합니다.
+	 *
+	 * 두번째로, 현재는 대략 30 lines으로 하나의 화면에 코드가 모두 나와 괜찮은 코드이지만,
+	 * 이후 코드의 복잡성을 고려한다면, 하나의 function에서 최소한의 return 이 수행되게 만들어주어야 합니다.
+	 * to-be:
+	 var value string
+
+	 if ... {
+		value = "배달 완료된 상태입니다."
+	 } else if ...{
+		value = fmt.Sprintf("상태가 %x으로 변경되었습니다.", state)
+	 } else{
+		value = "블라 블라"
+	 }
+
+	 return value
+	 */
 }

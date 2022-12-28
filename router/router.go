@@ -50,6 +50,13 @@ func (p *Router) Idx() *gin.Engine {
 	}
 	return r
 }
+	/* [코드리뷰]
+	 * Group을 사용하여 API 성격에 따라 request를 관리하는 코드는 매우 좋은 코드입니다.
+     * 일반적으로 현업에서도 이와 같은 코드를 자주 사용합니다. 훌륭합니다.
+	 *
+	 * 또한 API의 endpoint에 version을 넣어주셔서, 이후에 api의 수정이 발생할 경우,
+	 * v01 방식의 클라이언트와, v02 방식의 클라이언트를 모두 받아줄 수 있는 확장성 있는 좋은 코드입니다.
+	 */
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
