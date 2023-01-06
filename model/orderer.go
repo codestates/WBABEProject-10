@@ -15,11 +15,6 @@ type CreateOrderBody struct {
 	Address  string   `validate:"required"`
 	MenuName []string `validate:"required"`
 }
-/* [코드리뷰]
- * `validate:"required"` option을 통해 필수로 존재해야 하는 값들을 잘 명시해주셨습니다.
- * 필수적으로 필요한 값이라면, 서비스하는 로직과 부합한 default option도 추가해보시는 것을 추천드립니다.
- * 보다 편리한 시스템 운영 환경을 구성하실 수 있을 것으로 보여집니다.
- */
 
 type CreateReviewBody struct {
 	Score       int
@@ -100,11 +95,6 @@ func (m *Model) AddOrder(orderId primitive.ObjectID, addOrderBody AddOrderBody) 
 	if order.State != 0 && order.State != 1 {
 		return errors.New("주문을 추가할 수 없습니다.")
 	}
-	/* [코드리뷰]
-	 * error package를 사용하여 에러 상황을 잘 만들어주셨습니다.
-	 * 이렇게 의도적으로 에러를 유도한 뒤에는 주문관리 시스템의 running을 보장하기 위해,
-	 * 에러에 대한 예외 처리를 해주시는 부분도 함께 개발해주시면 보다 견고한 코드가 될 것으로 예상됩니다.
-	 */
 
 	order.MenuLists = append(order.MenuLists, addOrderBody.MenuName...)
 

@@ -226,13 +226,3 @@ func (p *Controller) CreateOrder(c *gin.Context) {
 		"msg": "OK",
 	})
 }
-
-/* [코드리뷰]
-	 * 들어오는 api request에 대해서 validation 코드를 넣어보시는 건 어떨까요?
-	 * server에서는 항상 client를 의심하는 방어적 코딩 스타일을 수행해야 합니다.
-	 * 
-	 * 에러 상황에 대한 간단한 메세지 들이 많이 발생하고 있네요.
-	 * 해당 값을, 하나의 map 함수의 key, value로 관리하는 것을 추천드립니다.
-	 * 대신 mapping되는 string 타입의 key 값이 상황이 잘 설명되는 
-	 * naming convention이 있으면 깔끔해질 것으로 보여집니다.
-*/
