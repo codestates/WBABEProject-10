@@ -1,6 +1,53 @@
 definitions:
   controller.Controller:
     type: object
+  model.CreateOrderBody:
+    properties:
+      address:
+        type: string
+      menuName:
+        items:
+          type: string
+        type: array
+      phone:
+        type: string
+    required:
+    - address
+    - menuName
+    - phone
+    type: object
+  model.CreateReviewBody:
+    properties:
+      isRecommend:
+        type: boolean
+      review:
+        type: string
+      score:
+        type: integer
+    type: object
+  model.Menu:
+    properties:
+      canBeOrder:
+        type: boolean
+      createdAt:
+        type: string
+      id:
+        type: string
+      isDeleted:
+        type: boolean
+      name:
+        type: string
+      origin:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      todayRecommend:
+        type: boolean
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -15,42 +62,34 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call GetMenus, return ok by json.
+            items:
+              $ref: '#/definitions/model.Menu'
+            type: array
+      summary: 메뉴를 조회합니다.
   /orderer/v01/order:
     post:
       consumes:
       - application/json
       description: 주문 기능
       parameters:
-      - description: phone
+      - description: CreateOrderBody
         in: body
-        name: phone
+        name: CreateOrderBody
         required: true
         schema:
-          type: string
-      - description: address
-        in: body
-        name: address
-        required: true
-        schema:
-          type: string
-      - description: menuName
-        in: body
-        name: menuName
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
+          $ref: '#/definitions/model.CreateOrderBody'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call CreateOrder, return ok by json.
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: 원하는 메뉴를 주문합니다.
   /orderer/v01/order/{id}:
     patch:
       consumes:
@@ -68,8 +107,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call AddOrder, return ok by json.
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: 기존 주문에 새로운 주문을 추가합니다.
     put:
       consumes:
       - application/json
@@ -80,26 +123,38 @@ paths:
         name: id
         required: true
         type: string
+      - description: MenuName
+        in: body
+        name: MenuName
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call AddOrder, return ok by json.
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: 이미 전달한 주문을 수정합니다.
   /orderer/v01/order/state:
     get:
       consumes:
       - application/json
       description: 주문 상태 조회 기능
       parameters:
-      - description: phone
+      - description: Phone
         in: query
         name: phone
         required: true
         type: string
-      - description: address
+      - description: Address
         in: query
         name: address
         required: true
@@ -110,8 +165,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call GetOrderState, return ok by json.
+            type: string
+      summary: 주문 상태를 조회합니다.
   /orderer/v01/reviews:
     get:
       consumes:
@@ -124,7 +179,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/controller.Controller'
-      summary: call GetReviews, return ok by json.
+      summary: 리뷰를 조회합니다.
   /orderer/v01/reviews/{orderId}:
     post:
       consumes:
@@ -136,64 +191,40 @@ paths:
         name: orderId
         required: true
         type: string
+      - description: CreateReviewBody
+        in: body
+        name: CreateReviewBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateReviewBody'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call CreateReview, return ok by json.
+            type: string
+      summary: 리뷰를 작성합니다.
   /receipient/v01/menus:
     post:
       consumes:
       - application/json
       description: 메뉴 추가 가능
       parameters:
-      - description: name
+      - description: Menu
         in: body
-        name: name
+        name: Menu
         required: true
         schema:
-          type: string
-      - description: canBeOrder
-        in: body
-        name: canBeOrder
-        required: true
-        schema:
-          type: boolean
-      - description: quantity
-        in: body
-        name: quantity
-        required: true
-        schema:
-          type: integer
-      - description: price
-        in: body
-        name: price
-        required: true
-        schema:
-          type: integer
-      - description: origin
-        in: body
-        name: origin
-        required: true
-        schema:
-          type: string
-      - description: todayRecommend
-        in: body
-        name: todayRecommend
-        required: true
-        schema:
-          type: boolean
+          $ref: '#/definitions/model.Menu'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call NewMenu, return ok by json.
+            type: string
+      summary: 기존 메뉴에 새로운 메뉴를 추가합니다.
   /receipient/v01/menus/{name}:
     delete:
       consumes:
@@ -211,8 +242,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call DeleteMenu, return ok by json.
+            type: string
+      summary: 메뉴를 삭제합니다.
     patch:
       consumes:
       - application/json
@@ -223,38 +254,20 @@ paths:
         name: name
         required: true
         type: string
-      - description: canBeOrder
+      - description: Menu
         in: body
-        name: canBeOrder
+        name: Menu
         required: true
         schema:
-          type: boolean
-      - description: price
-        in: body
-        name: price
-        required: true
-        schema:
-          type: integer
-      - description: origin
-        in: body
-        name: origin
-        required: true
-        schema:
-          type: string
-      - description: todayRecommend
-        in: body
-        name: todayRecommend
-        required: true
-        schema:
-          type: boolean
+          $ref: '#/definitions/model.Menu'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call UpdateMenu, return ok by json.
+            type: string
+      summary: 기존 메뉴를 수정합니다.
   /receipient/v01/order:
     get:
       consumes:
@@ -266,8 +279,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call GetOrders, return ok by json.
+            type: string
+      summary: 전체 주문을 조회합니다.
   /receipient/v01/order/{id}/state:
     patch:
       consumes:
@@ -285,6 +298,6 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Controller'
-      summary: call UpdateOrderState, return ok by json.
+            type: string
+      summary: 주문 받은 상태를 업데이트합니다.
 swagger: "2.0"

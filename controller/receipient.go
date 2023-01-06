@@ -10,19 +10,14 @@ import (
 )
 
 // NewMenu godoc
-// @Summary call NewMenu, return ok by json.
+// @Summary 기존 메뉴에 새로운 메뉴를 추가합니다.
 // @Description 메뉴 추가 가능
 // @name NewMenu
 // @Accept  json
 // @Produce  json
-// @Param Name body string true "Name"
-// @Param CanBeOrder body bool true "CanBeOrder"
-// @Param Quantity body int true "Quantity"
-// @Param Price body int true "Price"
-// @Param Origin body string true "Origin"
-// @Param TodayRecommend body bool true "TodayRecommend"
+// @Param Menu body model.Menu true "Menu"
 // @Router /receipient/v01/menus [post]
-// @Success 200 {object} Controller
+// @Success 200 {object} string
 func (p *Controller) NewMenu(c *gin.Context) {
 	var menu model.Menu
 
@@ -37,18 +32,15 @@ func (p *Controller) NewMenu(c *gin.Context) {
 }
 
 // UpdateMenu godoc
-// @Summary call UpdateMenu, return ok by json.
+// @Summary 기존 메뉴를 수정합니다.
 // @Description 메뉴 업데이트 가능
 // @name UpdateMenu
 // @Accept  json
 // @Produce  json
 // @Param name path string true "name"
-// @Param CanBeOrder body bool true "CanBeOrder"
-// @Param Price body int true "Price"
-// @Param Origin body string true "Origin"
-// @Param TodayRecommend body bool true "TodayRecommend"
+// @Param Menu body model.Menu true "Menu"
 // @Router /receipient/v01/menus/{name} [patch]
-// @Success 200 {object} Controller
+// @Success 200 {object} string
 func (p *Controller) UpdateMenu(c *gin.Context) {
 	name := c.Param("name")
 	var menu model.Menu
@@ -64,14 +56,14 @@ func (p *Controller) UpdateMenu(c *gin.Context) {
 }
 
 // DeleteMenu godoc
-// @Summary call DeleteMenu, return ok by json.
+// @Summary 메뉴를 삭제합니다.
 // @Description 메뉴 삭제 기능
 // @name DeleteMenu
 // @Accept  json
 // @Produce  json
 // @Param name path string true "name"
 // @Router /receipient/v01/menus/{name} [delete]
-// @Success 200 {object} Controller
+// @Success 200 {object} string
 func (p *Controller) DeleteMenu(c *gin.Context) {
 	name := c.Param("name")
 
@@ -83,13 +75,13 @@ func (p *Controller) DeleteMenu(c *gin.Context) {
 }
 
 // GetOrders godoc
-// @Summary call GetOrders, return ok by json.
+// @Summary 전체 주문을 조회합니다.
 // @Description 주문 조회 기능
 // @name GetOrders
 // @Accept  json
 // @Produce  json
 // @Router /receipient/v01/order [get]
-// @Success 200 {object} Controller
+// @Success 200 {object} string
 func (p *Controller) GetOrders(c *gin.Context) {
 	result := p.md.GetOrders()
 
@@ -99,16 +91,15 @@ func (p *Controller) GetOrders(c *gin.Context) {
 	})
 }
 
-
 // UpdateOrderState godoc
-// @Summary call UpdateOrderState, return ok by json.
+// @Summary 주문 받은 상태를 업데이트합니다.
 // @Description 주문 상태 업데이트 기능
 // @name UpdateOrderState
 // @Accept  json
 // @Produce  json
 // @Param id path string true "id"
 // @Router /receipient/v01/order/{id}/state [patch]
-// @Success 200 {object} Controller
+// @Success 200 {object} string
 func (p *Controller) UpdateOrderState(c *gin.Context) {
 	orderId := c.Param("id")
 

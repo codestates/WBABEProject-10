@@ -25,12 +25,15 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call GetMenus, return ok by json.",
+                "summary": "메뉴를 조회합니다.",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Menu"
+                            }
                         }
                     }
                 }
@@ -45,36 +48,15 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call CreateOrder, return ok by json.",
+                "summary": "원하는 메뉴를 주문합니다.",
                 "parameters": [
                     {
-                        "description": "phone",
-                        "name": "phone",
+                        "description": "CreateOrderBody",
+                        "name": "CreateOrderBody",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "address",
-                        "name": "address",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "menuName",
-                        "name": "menuName",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/model.CreateOrderBody"
                         }
                     }
                 ],
@@ -82,7 +64,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -97,18 +85,18 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call GetOrderState, return ok by json.",
+                "summary": "주문 상태를 조회합니다.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "phone",
+                        "description": "Phone",
                         "name": "phone",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "address",
+                        "description": "Address",
                         "name": "address",
                         "in": "query",
                         "required": true
@@ -118,7 +106,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -133,7 +121,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call AddOrder, return ok by json.",
+                "summary": "이미 전달한 주문을 수정합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -141,13 +129,31 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "MenuName",
+                        "name": "MenuName",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -160,7 +166,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call AddOrder, return ok by json.",
+                "summary": "기존 주문에 새로운 주문을 추가합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -174,7 +180,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -189,7 +201,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call GetReviews, return ok by json.",
+                "summary": "리뷰를 조회합니다.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -209,7 +221,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call CreateReview, return ok by json.",
+                "summary": "리뷰를 작성합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -217,13 +229,22 @@ const docTemplate = `{
                         "name": "orderId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "CreateReviewBody",
+                        "name": "CreateReviewBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateReviewBody"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -238,60 +259,15 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call NewMenu, return ok by json.",
+                "summary": "기존 메뉴에 새로운 메뉴를 추가합니다.",
                 "parameters": [
                     {
-                        "description": "name",
-                        "name": "name",
+                        "description": "Menu",
+                        "name": "Menu",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "canBeOrder",
-                        "name": "canBeOrder",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    {
-                        "description": "quantity",
-                        "name": "quantity",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "price",
-                        "name": "price",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "origin",
-                        "name": "origin",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "todayRecommend",
-                        "name": "todayRecommend",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "boolean"
+                            "$ref": "#/definitions/model.Menu"
                         }
                     }
                 ],
@@ -299,7 +275,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -314,7 +290,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call DeleteMenu, return ok by json.",
+                "summary": "메뉴를 삭제합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -328,7 +304,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -341,7 +317,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call UpdateMenu, return ok by json.",
+                "summary": "기존 메뉴를 수정합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -351,39 +327,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "canBeOrder",
-                        "name": "canBeOrder",
+                        "description": "Menu",
+                        "name": "Menu",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    {
-                        "description": "price",
-                        "name": "price",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "origin",
-                        "name": "origin",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "todayRecommend",
-                        "name": "todayRecommend",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "boolean"
+                            "$ref": "#/definitions/model.Menu"
                         }
                     }
                 ],
@@ -391,7 +340,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -406,12 +355,12 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call GetOrders, return ok by json.",
+                "summary": "전체 주문을 조회합니다.",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -426,7 +375,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "call UpdateOrderState, return ok by json.",
+                "summary": "주문 받은 상태를 업데이트합니다.",
                 "parameters": [
                     {
                         "type": "string",
@@ -440,7 +389,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Controller"
+                            "type": "string"
                         }
                     }
                 }
@@ -450,6 +399,77 @@ const docTemplate = `{
     "definitions": {
         "controller.Controller": {
             "type": "object"
+        },
+        "model.CreateOrderBody": {
+            "type": "object",
+            "required": [
+                "address",
+                "menuName",
+                "phone"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "menuName": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateReviewBody": {
+            "type": "object",
+            "properties": {
+                "isRecommend": {
+                    "type": "boolean"
+                },
+                "review": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Menu": {
+            "type": "object",
+            "properties": {
+                "canBeOrder": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isDeleted": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "todayRecommend": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
